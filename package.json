@@ -1,0 +1,27 @@
+{
+  "name": "lighthouse-journal",
+  "version": "1.0.0",
+  "description": "An offline version of www.writelighthouse.com",
+  "homepage": "https://github.com/team-crystalline/lighthouse-offline#readme",
+  "bugs": {
+    "url": "https://github.com/team-crystalline/lighthouse-offline/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/team-crystalline/lighthouse-offline.git"
+  },
+  "license": "MIT",
+  "author": "Team Crystalline",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "electron": "^43.2.0"
+  },
+  "dependencies": {
+    "update-electron-app": "^3.3.0"
+  }
+}
