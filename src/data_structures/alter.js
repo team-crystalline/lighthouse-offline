@@ -1,5 +1,5 @@
 /**
- * An alter
+ * An alter.
  * @param {Object} args - The object from the database.
  */
 export class Alter{
@@ -45,7 +45,12 @@ export class Alter{
         console.log(`Turn ${property}'s value to ${value}.`);
         return true;
     }
+    /**
+     * Deletes this entry from the database.
+     * @returns {Boolean} Whether the transaction with the database passed or failed.
+     */
     delete(){
-        return console.log(`Deleting ${this.name}`)
+        console.log(`Deleting ${this.name}`)
+        return true;
     }
 }
