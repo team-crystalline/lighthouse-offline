@@ -1,5 +1,6 @@
 {
   "name": "lighthouse-journal",
+  "desktopName": "com.teamcrystalline.lighthouse",
   "version": "1.0.0",
   "description": "An offline version of www.writelighthouse.com",
   "homepage": "https://github.com/team-crystalline/lighthouse-offline#readme",
@@ -12,8 +13,7 @@
   },
   "license": "MIT",
   "author": "Team Crystalline",
-  "type": "commonjs",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,18 +31,16 @@
       "icon": "assets/icon.png",
       "syncDesktopName": true
     },
-    "mac": {
-      "icon": "assets/icons/icon.icns"
-    },
     "win": {
       "icon": "assets/icons/icon.icns"
     }
   },
   "devDependencies": {
-    "electron": "^43.2.0"
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3"
   },
   "dependencies": {
-    "electron-builder": "^26.15.3",
+    "sqlite3": "^6.0.1",
     "update-electron-app": "^3.3.0"
   }
 }
