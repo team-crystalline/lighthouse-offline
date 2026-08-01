@@ -18,10 +18,31 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "build": {
+    "appId": "com.teamcrystalline.lighthouse",
+    "productName": "Lighthouse",
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "Other",
+      "maintainer": "dee_deyes@writelighthouse.com",
+      "icon": "assets/icon.png",
+      "syncDesktopName": true
+    },
+    "mac": {
+      "icon": "assets/icons/icon.icns"
+    },
+    "win": {
+      "icon": "assets/icons/icon.icns"
+    }
+  },
   "devDependencies": {
     "electron": "^43.2.0"
   },
   "dependencies": {
+    "electron-builder": "^26.15.3",
     "update-electron-app": "^3.3.0"
   }
 }
