@@ -1,5 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-// contextBridge.exposeInMainWorld('LighthouseAPI', {
-
-// });
+contextBridge.exposeInMainWorld('LighthouseAPI', {
+    chooseDir: () => ipcRenderer.invoke('scripts:choose-dir'),
+    readSettings: async() => ipcRenderer.invoke('scripts:read-settings'),
+    readAlts: async() => ipcRenderer.invoke('scripts:read-alts')
+});
