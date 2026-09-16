@@ -1,0 +1,32 @@
+:root {
+  --color-navy: #0B2239;
+  --color-teal: #1E4B6A;
+  --color-gold: #C8A24A;
+  --color-cream: #EAD9B6;
+  --color-sand: #F8F2E6;
+  
+  --gradient-ocean: linear-gradient(135deg, var(--color-navy), var(--color-teal));
+  --gradient-sunset: linear-gradient(135deg, var(--color-gold), var(--color-cream));
+  --border-rope: 3px solid var(--color-gold);
+  --border-subtle: 1px solid var(--color-teal);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--gradient-ocean);
+}
+
+h1, h2, h3, h4 {
+    color: var(--color-gold);
+}
+
+nav {
+    padding: 8px;
+    background-color: var(--color-navy);
+    color: var(--color-cream);
+}

@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const csv = require('csv-parser');
-const fs = require('fs');
+const fs = require('fs').promises;
 const { read } = require('node:fs');
 
 if (app.isPackaged) {
@@ -17,6 +17,10 @@ function settingsFile() {
   return path.join(app.getPath('userData'), 'settings.json');
 }
 
+/**
+ * Parses settings and makes it into a readable Object
+ * @returns {Object} Settings
+ */
 async function readSettings() {
   try {
     return JSON.parse(await fs.readFile(settingsFile(), 'utf8'));
@@ -25,8 +29,26 @@ async function readSettings() {
   }
 }
 
+/**
+ * Writes settings file.
+ * @param {*} settings 
+ */
 async function writeSettings(settings) {
   await fs.writeFile(settingsFile(), JSON.stringify(settings, null, 2), 'utf8');
+}
+
+/**
+ * Checks if a path exists.
+ * @param {String} path 
+ * @returns {Boolean} If the file exists or not.
+ */
+async function fileExists(path) {
+  try {
+    await fs.stat(path);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 let cachedDir = null;
@@ -36,7 +58,6 @@ async function dataDir() {
     const settings = await readSettings();
     cachedDir = settings.dataDir || path.join(app.getPath('documents'), 'lighthouse-offline');
   }
-
   return cachedDir;
 }
 
@@ -53,7 +74,7 @@ const createWindow = () => {
       contextIsolation: true,
       nodeIntegration: false,
     },
-    backgroundColor: '#393072',
+    // backgroundColor: '#393072',
   })
 
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
@@ -102,16 +123,23 @@ ipcMain.handle('scripts:read-settings', async (_event) => {
   try {
     return JSON.parse(await fs.readFile(settingsFile(), 'utf8'));
   } catch {
+    // Create settings!
+    await writeSettings({}); // <-- Error here
     return {};
   }
 });
 
 ipcMain.handle('scripts:read-alts', async (_event) => {
   const settings = await readSettings();
-  // if (Object.keys(settings).length < 1) return []; // Can't set anything yet.
+  if (Object.keys(settings).length < 1) return []; // Can't set anything yet.
 
   const results = [];
 
+  if (!fileExists(path.join(settings.dataDir, 'alters.csv'))){
+    console.log("No Alters file exists.");
+  } else {
+    console.log("The Alters file exists.");
+  }
   // fs.createReadStream(path.join(settings.dataDir, 'alters.csv'))
   //   .pipe(csv())
   //   .on('data', (data) => results.push(data))
