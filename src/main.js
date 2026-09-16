@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const csv = require('csv-parser');
 const fs = require('fs').promises;
+const fsCallback = require('fs');
 const { read } = require('node:fs');
 
 if (app.isPackaged) {
@@ -131,24 +132,76 @@ ipcMain.handle('scripts:read-settings', async (_event) => {
 
 ipcMain.handle('scripts:read-alts', async (_event) => {
   const settings = await readSettings();
-  if (Object.keys(settings).length < 1) return []; // Can't set anything yet.
+  if (Object.keys(settings).length < 1) return [];
 
   const results = [];
+  const csvPath = path.join(settings.dataDir, 'alters.csv');
 
-  if (!fileExists(path.join(settings.dataDir, 'alters.csv'))){
-    console.log("No Alters file exists.");
-  } else {
-    console.log("The Alters file exists.");
+  if (!(await fileExists(csvPath))) {
+    const headers = [
+      'id', 'system_id', 'name', 'nickname', 'pronouns', 'species', 'gender',
+      'sexuality', 'age', 'type', 'source', 'triggersPos', 'triggersNeg',
+      'likes', 'dislikes', 'hobbies', 'birthday', 'foundOn', 'job',
+      'frontTells', 'safety', 'accommodation', 'wishes', 'relationships',
+      'notes', 'appearance', 'image', 'banner', 'css'
+    ];
+    await fs.writeFile(csvPath, headers.join(',') + '\n');
+    console.log("Created alters.csv at:", csvPath);
   }
-  // fs.createReadStream(path.join(settings.dataDir, 'alters.csv'))
-  //   .pipe(csv())
-  //   .on('data', (data) => results.push(data))
-  //   .on('end', () => {
-  //     console.log(results);
-  //     // [
-  //     //   { NAME: 'Daffy Duck', AGE: '24' },
-  //     //   { NAME: 'Bugs Bunny', AGE: '22' }
-  //     // ]
-  //   });
 
+  return new Promise((resolve, reject) => {
+    fsCallback.createReadStream(csvPath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
+});
+
+ipcMain.handle('scripts:read-systems', async (_event) => {
+  const settings = await readSettings();
+  if (Object.keys(settings).length < 1) return [];
+
+  const results = [];
+  const csvPath = path.join(settings.dataDir, 'systems.csv');
+
+  if (!(await fileExists(csvPath))) {
+    const headers = [
+      'name', 'id', 'description', 'subsystems', 'tags', 'createdOn'
+    ];
+    await fs.writeFile(csvPath, headers.join(',') + '\n');
+    console.log("Created systems.csv at:", csvPath);
+  }
+
+  return new Promise((resolve, reject) => {
+    fsCallback.createReadStream(csvPath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
+});
+
+ipcMain.handle('scripts:read-journals', async (_event) => {
+  const settings = await readSettings();
+  if (Object.keys(settings).length < 1) return [];
+
+  const results = [];
+  const csvPath = path.join(settings.dataDir, 'journals.csv');
+
+  if (!(await fileExists(csvPath))) {
+    const headers = [
+      'id', 'author', 'skin', 'hasPass', 'password'
+    ];
+    await fs.writeFile(csvPath, headers.join(',') + '\n');
+    console.log("Created journals.csv at:", csvPath);
+  }
+
+  return new Promise((resolve, reject) => {
+    fsCallback.createReadStream(csvPath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
 });

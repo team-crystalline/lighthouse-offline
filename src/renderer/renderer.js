@@ -8,8 +8,20 @@ async function init() {
     dirBtn.id = 'directory';
     dirBtn.textContent = hasSettings ? 'Change Folder' : 'Choose Folder';
     navBar.append(dirBtn);
-
     await addEvents();
+
+    //#region Page Events ----
+    const systemsPage = document.getElementById('systems-page');
+    const journalsPage = document.getElementById('journals-page');
+
+    if (systemsPage){
+        await api.readSystems();
+    }
+
+    if (journalsPage){
+        await api.readJournals();
+    }
+    //#endregion ----
 }
 
 async function addEvents() {
