@@ -134,7 +134,7 @@ ipcMain.handle('scripts:read-alts', async (_event) => {
   const settings = await readSettings();
   if (Object.keys(settings).length < 1) return [];
 
-  const results = [];
+  let results = [];
   const csvPath = path.join(settings.dataDir, 'alters.csv');
 
   if (!(await fileExists(csvPath))) {

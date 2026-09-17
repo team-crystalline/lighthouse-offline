@@ -5,5 +5,5 @@ contextBridge.exposeInMainWorld('LighthouseAPI', {
     readSettings: async() => ipcRenderer.invoke('scripts:read-settings'),
     readAlts: async() => ipcRenderer.invoke('scripts:read-alts'),
     readSystems: async() => ipcRenderer.invoke('scripts:read-systems'),
-    readJournals: async() => ipcRenderer.invoke('scripts:read-journals')
+    readJournals: async() => ipcRenderer.invoke('scripts:read-journals'),
 });

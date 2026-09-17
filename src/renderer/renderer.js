@@ -13,13 +13,25 @@ async function init() {
     //#region Page Events ----
     const systemsPage = document.getElementById('systems-page');
     const journalsPage = document.getElementById('journals-page');
+    const homePage = document.getElementById('home-page');
 
-    if (systemsPage){
+    if (systemsPage) {
         await api.readSystems();
     }
 
-    if (journalsPage){
+    if (journalsPage) {
         await api.readJournals();
+    }
+
+    if (homePage) {
+        const alters = await api.readAlts();
+        const splash = document.createElement('p');
+        if (alters.length < 1) {
+            splash.textContent = 'No alters have been recorded yet.';
+        } else {
+            splash.textContent = alters;
+        }
+        document.querySelector('#alters-article').append(splash);
     }
     //#endregion ----
 }

@@ -1,3 +1,7 @@
+const path = require('path');
+const crud = require('./common_actions');
+// ... This means "Cryptography", not like... crypto as in the scammy "currency"
+const crypto = require('crypto');
 /**
  * A system, which holds alters.
  * @param {Object} args - The object from the database.
@@ -28,22 +32,63 @@ export class System {
         this.tags = self.tags;
         this.createdOn = self.createdOn
     }
+    async getCSV() {
+        let settings = await crud.settings();
+        if (settings.dataDir) {
+            return path.join(settings.dataDir, 'systems.csv')
+        } else {
+            return null;
+        }
+    }
     /**
      * Modifies a property for the database.
      * @param {*} property 
      * @param {*} value 
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    modify(property, value){
+    async modify(property, value) {
         console.log(`Turn ${property}'s value to ${value}.`);
-        return true;
+        this[property] = value;
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.updateInCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
     }
     /**
      * Deletes this entry from the database.
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    delete(){
+    async delete() {
         console.log(`Deleting ${this.name}`)
-        return true;
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.deleteFromCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Adds this alter to the CSV
+     * @returns {Boolean} Whether the transaction with the database passed or failed.
+     */
+    async commit() {
+        console.log(`Adding ${this.name}`)
+        this.id = crypto.randomUUID();
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.insertToCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    headers() {
+        return ['name', 'id', 'description', 'subsystems', 'tags', 'createdOn']
     }
 }

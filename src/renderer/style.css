@@ -16,11 +16,25 @@
     src: url('../assets/fonts/BerkshireSwash.ttf');
 }
 
+@font-face {
+    font-family: 'Lexend';
+    src: url('../assets/fonts/Lexend.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto Slab';
+    src: url('../assets/fonts/RobotoSlab.ttf');
+}
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Franklin Gothic Medium', Helvetica, Arial, sans-serif;
+    font-family: 'Lexend', 'Franklin Gothic Medium', Helvetica, Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
 }
 
 body {
@@ -28,9 +42,14 @@ body {
     min-height: 100vh;
 }
 
-h1, h2, h3, h4 {
+h1 {
     color: var(--color-gold);
     font-family: 'BerkshireSwash', cursive;
+}
+
+h2, h3, h4 {
+    color: var(--color-teal);
+    font-family: 'Roboto Slab', Georgia, 'Times New Roman', Times, serif;
 }
 
 nav {
@@ -56,6 +75,18 @@ nav a, nav button {
     margin: auto 2px;
 }
 
-main{
+main {
     padding: 8px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 10vh);
+}
+
+main > section {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 8px;
+    flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border-radius: 8px;
 }

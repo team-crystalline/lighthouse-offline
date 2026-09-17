@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <link rel="stylesheet" href="./style.css" type="text/css">
-    <title>Lighthouse</title>
-  </head>
-  <body>
-    <nav id="top-bar">
-      <a href="./alters.html">Alters</a>
-      <a href="./systems.html">Systems</a>
-      <a href="./journals.html">Journals</a>
-    </nav>
-    <main>
-      <h1>Main</h1>
-    </main>
-    <script src="./renderer.js"></script>
-  </body>
+
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta charset="UTF-8" />
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+  <link rel="stylesheet" href="./style.css" type="text/css">
+  <title>Lighthouse</title>
+</head>
+
+<body id="home-page">
+  <nav id="top-bar">
+    <a href="./alters.html">Alters</a>
+    <a href="./systems.html">Systems</a>
+    <a href="./journals.html">Journals</a>
+    <a href="./settings.html">Settings</a>
+  </nav>
+  <main>
+    <h1>Home</h1>
+    <section>
+      <p>This is the main section of the app.</p>
+      <article id="alters-article">
+        <h2>Alters</h2>
+      </article>
+    </section>
+  </main>
+  <script src="./renderer.js"></script>
+</body>
+
 </html>
