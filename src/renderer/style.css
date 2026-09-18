@@ -45,11 +45,20 @@ body {
 h1 {
     color: var(--color-gold);
     font-family: 'BerkshireSwash', cursive;
+    margin-bottom: 8px;
 }
 
 h2, h3, h4 {
     color: var(--color-teal);
     font-family: 'Roboto Slab', Georgia, 'Times New Roman', Times, serif;
+}
+
+button {
+    background: var(--color-teal);
+    color: var(--color-cream);
+    padding: 8px;
+    border: 0;
+    border-radius: 8px;
 }
 
 nav {
@@ -67,6 +76,18 @@ nav a, nav button {
     color: var(--color-cream);
     text-decoration: none;
     background: var(--color-teal);
+    border: 0;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: small;
+    margin: auto 2px;
+}
+
+.active-btn {
+    color: var(--color-navy);
+    text-decoration: none;
+    background: var(--color-gold);
     border: 0;
     padding: 8px 16px;
     border-radius: 4px;

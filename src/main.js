@@ -5,6 +5,8 @@ const fs = require('fs').promises;
 const fsCallback = require('fs');
 const { read } = require('node:fs');
 
+require('electron-reloader')(module);
+
 if (app.isPackaged) {
   const { updateElectronApp } = require('update-electron-app');
   updateElectronApp();
