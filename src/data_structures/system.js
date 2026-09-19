@@ -1,7 +1,8 @@
 const path = require('path');
-const crud = require('./common_actions');
+const crud = require('./common_actions/crud');
 // ... This means "Cryptography", not like... crypto as in the scammy "currency"
 const crypto = require('crypto');
+const {settingsFile, readSettings, writeSettings, dataDir} = require('../settings');
 /**
  * A system, which holds alters.
  * @param {Object} args - The object from the database.
@@ -23,17 +24,17 @@ const crypto = require('crypto');
  *  createdOn: 1735689600000
  * }
  */
-export class System {
+class System {
     constructor(self) {
         this.name = self.name;
         this.id = self.id;
         this.description = self.description;
         this.subsystems = self.subsystems;
-        this.tags = self.tags;
+        this.tags = self.tags.length > 0 ? String(self.tags).split(",") : "";
         this.createdOn = self.createdOn
     }
     async getCSV() {
-        let settings = await crud.settings();
+        let settings = await readSettings();
         if (settings.dataDir) {
             return path.join(settings.dataDir, 'systems.csv')
         } else {
@@ -92,3 +93,5 @@ export class System {
         return ['name', 'id', 'description', 'subsystems', 'tags', 'createdOn']
     }
 }
+
+module.exports = System;

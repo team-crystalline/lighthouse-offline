@@ -4,33 +4,34 @@ const fs = require('fs').promises;
 const fsCallback = require('fs');
 const { read } = require('node:fs');
 
-async function settings() {
-  let settingsPath = path.join(app.getPath('userData'), 'settings.json');
-  let settingsObj;
-  try {
-    settingsObj = JSON.parse(await fs.readFile(settingsPath, 'utf8'));
-  } catch (e) {
-    settingsObj = {};
-  }
-  return settingsObj;
-}
-
 async function writeCSVFromObjects(objects, headers, filePath){
     const lines = [headers.join(',')];
     objects.forEach((obj)=>{
-        lines.push(headers.map(h=> obj[h] ?? '').join(','));
+        const values = headers.map(h => {
+            let val = obj[h] ?? '';
+            if (String(val).includes(',') || String(val).includes('"')) {
+                return `"${String(val).replace(/"/g, '""')}"`;
+            }
+            return val;
+        });
+        lines.push(values.join(','));
     });
     await fs.writeFile(filePath, lines.join('\n'));
 }
 
-async function insertToCSV(data, filePath){
+async function insertToCSV(data, filePath) {
     const headers = data.headers();
-    const values = headers.map(key => data[key] ?? '');
-    
-    const csv = await fs.readFile(filePath, 'utf-8');
-    const newRow = values.join(',') + '\n';
-    
-    await fs.appendFile(filePath, newRow);
+    let csv = await fs.readFile(filePath, 'utf-8').catch(() => '');
+
+    if (!csv) csv = headers.join(',') + '\n';
+    else if (!csv.endsWith('\n')) csv += '\n';
+
+    const values = headers.map(key => {
+        const val = String(data[key] ?? '');
+        return /[",\n]/.test(val) ? `"${val.replace(/"/g, '""')}"` : val;
+    });
+
+    await fs.writeFile(filePath, csv + values.join(',') + '\n');
 }
 
 async function readCSV(filePath){
@@ -49,8 +50,7 @@ async function updateInCSV(data, filePath){
     const headers = data.headers();
 
     const updated = rows.map((row)=>{
-        // Does this row match? If yes, update it. If not, keep it the same.
-        row.id == data.id ? Object.fromEntries(headers.map(h => [h, data[h]])) : row
+        return row.id == data.id ? Object.fromEntries(headers.map(h => [h, data[h]])) : row
     });
     await writeCSVFromObjects(updated, headers, filePath);
 }
@@ -64,4 +64,4 @@ async function deleteFromCSV(data, filePath){
     await writeCSVFromObjects(filtered, headers, filePath);
 }
 
-module.exports = { insertToCSV, readCSV, updateInCSV, deleteFromCSV, settingsFile };
+module.exports = { insertToCSV, readCSV, updateInCSV, deleteFromCSV, };

@@ -3,7 +3,6 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -26,11 +25,30 @@
     <main>
       <h1>Systems</h1>
       <section>
-        <artcle id="toolbar">
-          <button>Create New System</button>
-        </artcle>
+        <article id="toolbar">
+          <button id="system-create">Create New System</button>
+        </article>
+        <article id="system-list">
+
+        </article>
       </section>
     </main>
+
+    <dialog id="system-modal">
+    <form method="dialog">
+      <h2>Create New System</h2>
+      <label for="sys-name-input">Name: </label>
+      <input type="text" placeholder="System Name" min="1" id="sys-name-input"/>
+      <label for="sys-desc-input">Description: </label>
+      <input type="text" placeholder="A short description" min="1" id="sys-desc-input"/>
+      <label for="sys-tags-input">Tags: </label>
+      <input type="text" placeholder="Some tags (separated by commas)" min="1" id="sys-tags-input"/>
+      <div class="button-group">
+        <button type="submit" id="close-create">Cancel</button>
+        <button type="submit" value="confirm" id="create-system">Create</button>
+      </div>
+    </form>
+  </dialog>
     <script src="./renderer.js"></script>
   </body>
 </html>

@@ -5,40 +5,19 @@ const fs = require('fs').promises;
 const fsCallback = require('fs');
 const { read } = require('node:fs');
 
-require('electron-reloader')(module);
+const System = require('./data_structures/system');
+const Alter = require('./data_structures/alter');
+const Journal = require('./data_structures/journal');
+
+const {settingsFile, readSettings, writeSettings, dataDir} = require('./settings');
+
+// require('electron-reloader')(module);
 
 if (app.isPackaged) {
   const { updateElectronApp } = require('update-electron-app');
   updateElectronApp();
 }
 
-/**
- * Returns the settings directory path. Gonna need this a lot.
- * @returns {String} Settings path
- */
-function settingsFile() {
-  return path.join(app.getPath('userData'), 'settings.json');
-}
-
-/**
- * Parses settings and makes it into a readable Object
- * @returns {Object} Settings
- */
-async function readSettings() {
-  try {
-    return JSON.parse(await fs.readFile(settingsFile(), 'utf8'));
-  } catch {
-    return {};
-  }
-}
-
-/**
- * Writes settings file.
- * @param {*} settings 
- */
-async function writeSettings(settings) {
-  await fs.writeFile(settingsFile(), JSON.stringify(settings, null, 2), 'utf8');
-}
 
 /**
  * Checks if a path exists.
@@ -53,16 +32,7 @@ async function fileExists(path) {
     return false;
   }
 }
-
 let cachedDir = null;
-
-async function dataDir() {
-  if (!cachedDir) {
-    const settings = await readSettings();
-    cachedDir = settings.dataDir || path.join(app.getPath('documents'), 'lighthouse-offline');
-  }
-  return cachedDir;
-}
 
 // Just to shut the damn terminal up:
 app.disableHardwareAcceleration();
@@ -122,12 +92,13 @@ ipcMain.handle('scripts:choose-dir', async (event) => {
   return { ok: true, dir: cachedDir };
 });
 
+//#region Read ----
 ipcMain.handle('scripts:read-settings', async (_event) => {
   try {
     return JSON.parse(await fs.readFile(settingsFile(), 'utf8'));
   } catch {
     // Create settings!
-    await writeSettings({}); // <-- Error here
+    await writeSettings({});
     return {};
   }
 });
@@ -207,3 +178,56 @@ ipcMain.handle('scripts:read-journals', async (_event) => {
       .on('error', reject);
   });
 });
+//#endregion 
+
+//#region Create ----
+ipcMain.handle('scripts:create-alt', async (_event, altObj) => {
+  const settings = await readSettings();
+  if (Object.keys(settings).length < 1) return [];
+
+  const csvPath = path.join(settings.dataDir, 'alters.csv');
+
+  if (await fileExists(csvPath)){
+    return new Promise((resolve, reject) => {
+      const newAlt = new Alter(altObj);
+      newAlt.commit();
+    });
+  } else {
+    return null;
+  }
+  
+});
+ipcMain.handle('scripts:create-system', async (_event, sysObj) => {
+  const settings = await readSettings();
+  if (Object.keys(settings).length < 1) return [];
+
+  const csvPath = path.join(settings.dataDir, 'systems.csv');
+
+  if (await fileExists(csvPath)){
+    return new Promise((resolve, reject) => {
+      const newSys = new System(sysObj);
+      newSys.commit();
+    });
+  } else {
+    return null;
+  }
+  
+});
+ipcMain.handle('scripts:create-journal', async (_event, journObj) => {
+  const settings = await readSettings();
+  if (Object.keys(settings).length < 1) return [];
+
+  const csvPath = path.join(settings.dataDir, 'journals.csv');
+
+  if (await fileExists(csvPath)){
+    return new Promise((resolve, reject) => {
+      const newJrnl = new Journal(journObj);
+      newJrnl.commit();
+    });
+  } else {
+    return null;
+  }
+  
+});
+
+//#endregion 

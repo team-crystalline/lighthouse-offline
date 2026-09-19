@@ -17,6 +17,21 @@ async function init() {
 
     if (systemsPage) {
         await api.readSystems();
+        document.querySelector("#system-create").addEventListener("click", () => {
+            document.querySelector("#system-modal").showModal()
+        });
+        document.querySelector("#close-create").addEventListener("click", () => {
+            document.querySelector("#system-modal").close()
+        });
+        document.querySelector("#create-system").addEventListener("click", async () => {
+            // const newSystem = new System({name: document.querySelector("#sys-name-input").value});
+            // newSystem.commit();
+            await api.createSystem({
+                    name: document.querySelector('#sys-name-input').value, 
+                    description: document.querySelector('#sys-desc-input').value, 
+                    tags: document.querySelector('#sys-tags-input').value
+                });
+        });
     }
 
     if (journalsPage) {

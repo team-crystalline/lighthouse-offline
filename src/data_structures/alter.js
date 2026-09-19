@@ -1,12 +1,13 @@
 const path = require('path');
-const crud = require('./common_actions');
+const crud = require('./common_actions/crud');
 // ... This means "Cryptography", not like... crypto as in the scammy "currency"
 const crypto = require('crypto');
+const {settingsFile, readSettings, writeSettings, dataDir} = require('../settings');
 /**
  * An alter.
  * @param {Object} args - The object from the database.
  */
-export class Alter {
+class Alter {
     constructor(self) {
         this.id = self.id;
         this.system_id = self.system_id;
@@ -40,7 +41,7 @@ export class Alter {
     }
 
     async getCSV() {
-        let settings = await crud.settings();
+        let settings = await readSettings();
         if (settings.dataDir) {
             return path.join(settings.dataDir, 'alters.csv')
         } else {
@@ -100,3 +101,4 @@ export class Alter {
         return ['id', 'system_id', 'name', 'nickname', 'pronouns', 'species', 'gender', 'sexuality', 'age', 'type', 'source', 'triggersPos', 'triggersNeg', 'likes', 'dislikes', 'hobbies', 'birthday', 'foundOn', 'job', 'frontTells', 'safety', 'accommodation', 'wishes', 'relationships', 'notes', 'appearance', 'image', 'banner', 'css']
     }
 }
+module.exports = {Alter};

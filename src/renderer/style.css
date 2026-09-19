@@ -1,6 +1,8 @@
 :root {
   --color-navy: #0B2239;
   --color-teal: #1E4B6A;
+  --color-teal-light: #4a7795;
+  --color-teal-lighter: #7fa7c1;
   --color-gold: #C8A24A;
   --color-cream: #EAD9B6;
   --color-sand: #F8F2E6;
@@ -111,3 +113,30 @@ main > section {
     box-sizing: border-box;
     border-radius: 8px;
 }
+
+dialog {
+    margin: auto;
+    height: 80vh;
+    width: 50vw;
+    background-color: var(--color-teal-lighter);
+    padding: 8px;
+    border: 0;
+    filter: drop-shadow(0 0 8px black);
+}
+dialog form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+dialog .button-group {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: auto;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+} 
