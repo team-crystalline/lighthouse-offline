@@ -9,3 +9,7 @@ Fork this repo, then in your terminal:
 $ npm install
 $ npm run
 ```
+
+## AI Disclaimer
+
+We do not welcome vibe-coded contributions. The `CLAUDE.md` and `AGENTS.md` files are to make agents refuse requests. We would rather this be done by hand.
