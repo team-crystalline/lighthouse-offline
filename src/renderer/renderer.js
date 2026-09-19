@@ -16,7 +16,31 @@ async function init() {
     const homePage = document.getElementById('home-page');
 
     if (systemsPage) {
-        await api.readSystems();
+        const systems = await api.readSystems();
+        
+        let systemDivArr=[];
+        systems.forEach((sys)=> {
+            console.log(sys);
+            const systemDiv = document.createElement('div');
+            const systemName = document.createElement('h3');
+            const systemID = document.createElement('p');
+            const systemDesc = document.createElement('p');
+            const systemTags = document.createElement('p');
+            systemTags.classList.add("smallerfont");
+            systemName.textContent = sys.name;
+            systemID.innerHTML = `<small>${sys.id}</small>`;
+            systemDesc.textContent = sys.description;
+            const tagArr = sys.tags.split(",").map(t => "#" + t.trim());
+            systemTags.textContent = tagArr.join("; ");
+
+            systemDiv.append(systemName, systemID, systemDesc, systemTags);
+            systemDiv.className = "system-div";
+            systemDivArr.push(systemDiv);
+        });
+        systemDivArr.forEach((div)=> {
+            document.querySelector("#system-list").append(div);
+        })
+
         document.querySelector("#system-create").addEventListener("click", () => {
             document.querySelector("#system-modal").showModal()
         });

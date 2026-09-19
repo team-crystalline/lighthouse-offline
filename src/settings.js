@@ -33,7 +33,7 @@ async function writeSettings(settings) {
   await fs.writeFile(settingsFile(), JSON.stringify(settings, null, 2), 'utf8');
 }
 
-
+let cachedDir = null;
 async function dataDir() {
   if (!cachedDir) {
     const settings = await readSettings();
