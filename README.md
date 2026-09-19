@@ -4,4 +4,8 @@ This is an offline version of Lighthouse on desktop. The app will be able to be 
 
 ## Getting Started
 
-Nothing much here. Fork this repo, type `npm i`. And that's about it. Nothing else here really.
+Fork this repo, then in your terminal:
+```
+$ npm install
+$ npm run
+```

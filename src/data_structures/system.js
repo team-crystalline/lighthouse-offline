@@ -1,3 +1,8 @@
+const path = require('path');
+const crud = require('./common_actions/crud');
+// ... This means "Cryptography", not like... crypto as in the scammy "currency"
+const crypto = require('crypto');
+const {settingsFile, readSettings, writeSettings, dataDir} = require('../settings');
 /**
  * A system, which holds alters.
  * @param {Object} args - The object from the database.
@@ -19,14 +24,22 @@
  *  createdOn: 1735689600000
  * }
  */
-export class System {
+class System {
     constructor(self) {
         this.name = self.name;
         this.id = self.id;
         this.description = self.description;
         this.subsystems = self.subsystems;
-        this.tags = self.tags;
+        this.tags = self.tags.length > 0 ? String(self.tags).split(",") : "";
         this.createdOn = self.createdOn
+    }
+    async getCSV() {
+        let settings = await readSettings();
+        if (settings.dataDir) {
+            return path.join(settings.dataDir, 'systems.csv')
+        } else {
+            return null;
+        }
     }
     /**
      * Modifies a property for the database.
@@ -34,16 +47,51 @@ export class System {
      * @param {*} value 
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    modify(property, value){
+    async modify(property, value) {
         console.log(`Turn ${property}'s value to ${value}.`);
-        return true;
+        this[property] = value;
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.updateInCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
     }
     /**
      * Deletes this entry from the database.
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    delete(){
+    async delete() {
         console.log(`Deleting ${this.name}`)
-        return true;
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.deleteFromCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Adds this alter to the CSV
+     * @returns {Boolean} Whether the transaction with the database passed or failed.
+     */
+    async commit() {
+        console.log(`Adding ${this.name}`)
+        this.id = crypto.randomUUID();
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.insertToCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    headers() {
+        return ['name', 'id', 'description', 'subsystems', 'tags', 'createdOn']
     }
 }
+
+module.exports = System;

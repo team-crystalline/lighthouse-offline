@@ -1,31 +1,77 @@
+const path = require('path');
+const crud = require('./common_actions/crud');
+// ... This means "Cryptography", not like... crypto as in the scammy "currency"
+const crypto = require('crypto');
+const {settingsFile, readSettings, writeSettings, dataDir} = require('../settings');
 /**
  * An alter.
  * @param {Object} args - The object from the database.
  */
-export class Journal {
-    constructor(self){
+class Journal {
+    constructor(self) {
         this.id = self.id;
         this.author = self.author; // <-- An alter's ID.
         this.skin = self.skin;
         this.hasPass = self.hasPass;
         this.password = self.password;
     }
+    async getCSV() {
+        let settings = await readSettings();
+        if (settings.dataDir) {
+            return path.join(settings.dataDir, 'journals.csv')
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Modifies a property for the database.
      * @param {*} property 
      * @param {*} value 
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    modify(property, value){
-        console.log(`Turn ${property}'s value to ${value}.`);
-        return true;
+    async modify(property, value) {
+        this[property] = value;
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.updateInCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
     }
     /**
      * Deletes this entry from the database.
      * @returns {Boolean} Whether the transaction with the database passed or failed.
      */
-    delete(){
-        console.log(`Deleting ${this.id}`)
-        return true;
+    async delete() {
+        let altCSV = await this.getCSV();
+        if (altCSV !== null) {
+            await crud.deleteFromCSV(this, altCSV);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Adds this alter to the CSV
+     * @returns {Boolean} Whether the transaction with the database passed or failed.
+     */
+    async commit() {
+        this.id = crypto.randomUUID();
+        let altCSV = await this.getCSV();
+        if (altCSV !== null){
+            await crud.insertToCSV(this, altCSV);
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    headers() {
+        return ['id', 'author', 'skin', 'hasPass', 'password'];
     }
 }
+
+module.exports = {Journal}

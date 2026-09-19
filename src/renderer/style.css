@@ -1,0 +1,161 @@
+:root {
+  --color-navy: #0B2239;
+  --color-teal: #1E4B6A;
+  --color-teal-light: #4a7795;
+  --color-teal-lighter: #7fa7c1;
+  --color-gold: #C8A24A;
+  --color-cream: #EAD9B6;
+  --color-sand: #F8F2E6;
+  
+  --gradient-ocean: linear-gradient(180deg, var(--color-navy), var(--color-teal));
+  --gradient-sunset: linear-gradient(180deg, var(--color-gold), var(--color-cream));
+  --border-rope: 3px solid var(--color-gold);
+  --border-subtle: 1px solid var(--color-teal);
+}
+
+@font-face {
+    font-family: 'BerkshireSwash';
+    src: url('../assets/fonts/BerkshireSwash.ttf');
+}
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('../assets/fonts/Lexend.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto Slab';
+    src: url('../assets/fonts/RobotoSlab.ttf');
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Lexend', 'Franklin Gothic Medium', Helvetica, Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: var(--gradient-ocean);
+    min-height: 100vh;
+}
+
+h1 {
+    color: var(--color-gold);
+    font-family: 'BerkshireSwash', cursive;
+    margin-bottom: 8px;
+}
+
+h2, h3, h4 {
+    color: var(--color-teal);
+    font-family: 'Roboto Slab', Georgia, 'Times New Roman', Times, serif;
+}
+
+button {
+    background: var(--color-teal);
+    color: var(--color-cream);
+    padding: 8px;
+    border: 0;
+    border-radius: 8px;
+}
+
+nav {
+    padding: 8px;
+    background-color: var(--color-navy);
+    color: var(--color-cream);
+    border-bottom: 3px solid var(--color-cream);
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+nav a, nav button {
+    color: var(--color-cream);
+    text-decoration: none;
+    background: var(--color-teal);
+    border: 0;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: small;
+    margin: auto 2px;
+}
+
+.active-btn {
+    color: var(--color-navy);
+    text-decoration: none;
+    background: var(--color-gold);
+    border: 0;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: small;
+    margin: auto 2px;
+}
+
+main {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 10vh);
+}
+
+main > section {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 8px;
+    flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+dialog {
+    margin: auto;
+    height: 80vh;
+    width: 50vw;
+    background-color: var(--color-teal-lighter);
+    padding: 8px;
+    border: 0;
+    filter: drop-shadow(0 0 8px black);
+}
+dialog form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+dialog .button-group {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: auto;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+} 
+
+.system-div {
+    margin: 8px auto;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#system-list{
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.smallfont {
+    font-size: small;
+}
+
+.smallerfont {
+    font-size: smaller;
+}
